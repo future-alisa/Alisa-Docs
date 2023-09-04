@@ -1,4 +1,4 @@
-//this is important, because we need to point out the component is client or server one while redering.
+//this is important, because we need to point out the component is client or server one while rendering.
 'use client';
 // Import React dependencies.
 import React, { useState } from 'react'
