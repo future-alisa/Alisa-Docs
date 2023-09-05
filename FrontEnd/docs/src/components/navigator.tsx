@@ -1,12 +1,23 @@
 import styles from '../css/common.module.scss';
-function MyCircyIcon(){
-    return <button className={styles.btn}>but1</button>
+
+interface props{
+    users:user[]
 }
 
-export default function MyNavigator(){
+interface user{
+    key:number
+    name:string
+}
+
+function MyCircyIcon({name}:{name:string}){
+    return <button className={styles.btn}>{name}</button>
+}
+
+export default function MyNavigator({users}:props){
+    const children=users.map(x=> <MyCircyIcon key={x.key} name={x.name}></MyCircyIcon>)
     return (
-        <div className={styles.nav}>
-            <MyCircyIcon></MyCircyIcon>
-        </div>
+    <div className={styles.nav}>
+        {children}
+    </div>
     );
 }
