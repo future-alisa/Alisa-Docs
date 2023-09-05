@@ -14,7 +14,7 @@ const initialValue: any[] = [
     },
 ]
 
-const DefineEditor = () => {
+const MyEditor = () => {
     const [editor] = useState(() => withReact(createEditor()))
     return (
         // Add the editable component inside the context.
@@ -24,4 +24,4 @@ const DefineEditor = () => {
     )
 }
 
-export default DefineEditor;
+export default MyEditor;
