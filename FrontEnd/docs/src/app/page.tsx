@@ -3,6 +3,9 @@ import MyNavigator from '@/components/navigator'
 
 export default function Home() {
   return (
-    <><MyNavigator></MyNavigator><MyEditor></MyEditor></>
+    <>
+      <MyNavigator></MyNavigator>
+      <MyEditor></MyEditor>
+    </>
   )
 }
