@@ -16,10 +16,14 @@ const initialValue: any[] = [
 
 const MyEditor = () => {
     const [editor] = useState(() => withReact(createEditor()))
+    const onChange = (event:[{type:string,children:any}]) => {
+        console.log(event[0].type)
+        console.log(event[0].children[0].text)
+    };
+    const onKeyDown=(event:{key:any})=>{console.log(event.key)}
     return (
-        // Add the editable component inside the context.
-        <Slate editor={editor} initialValue={initialValue}>
-            <Editable />
+        <Slate editor={editor} initialValue={initialValue} onChange={onChange}>
+            <Editable onKeyDown={onKeyDown} onChange={onChange}/>
         </Slate>
     )
 }
