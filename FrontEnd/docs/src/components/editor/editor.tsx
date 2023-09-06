@@ -23,7 +23,7 @@ const MyEditor = () => {
     const onKeyDown=(event:{key:any})=>{console.log(event.key)}
     return (
         <Slate editor={editor} initialValue={initialValue} onChange={onChange}>
-            <Editable onKeyDown={onKeyDown} onChange={onChange}/>
+            <Editable onKeyDown={onKeyDown}/>
         </Slate>
     )
 }
