@@ -40,7 +40,6 @@ const MyEditor = () => {
   // 定义一个处理文本变化的函数
   const handleTextChange = (newText: any) => {
     console.log("文本改变");
-    setText(newText);
     ws.send(newText);
   };
 
