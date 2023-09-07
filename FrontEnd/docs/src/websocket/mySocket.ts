@@ -19,6 +19,14 @@ class MySocket{
             console.log('结束通信')
         }
     }
+
+    public send(data:string){
+        this.ws.send(data)
+    }
+
+    public listen(listenr:(event:{data:any})=>void){
+        this.ws.onmessage=listenr
+    }
 }
 
 export default MySocket

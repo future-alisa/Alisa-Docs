@@ -51,6 +51,7 @@ public class WebSocket {
     @OnMessage
     public void onMessage(String message) {
         log.info("【WebSocket消息】收到客户端消息：" + message);
+        sendAllMessage(message);
     }
 
     /**
