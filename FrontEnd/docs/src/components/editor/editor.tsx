@@ -7,21 +7,19 @@ import React, { useState } from "react";
 import { createEditor, Transforms, Editor } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 
-// const onChange = (event:[{type:string,children:any}]) => {
-//     console.log(event[0].type)
-//     console.log(event[0].children[0].text)
-//     let text=event[0].children[0].text
-//     ws.send(text)
-// };
-
 const MyEditor = () => {
+    let changeBySelf=false
   const guid = Guid.create();
   const ws = new MySocket("ws://localhost:8080/websocket/" + guid);
 
   const listener = (event: any ) => {
-    console.log("接收到消息" + event);
+    console.log("接收到消息" + event.data);
     // 渲染editor
-    setText(event)
+    let msg=JSON.parse(event.data)
+    if(msg.uid.value!=guid.value){
+        msg.opts.map((x:any)=>editor.apply(x))
+        changeBySelf=false
+    }
   };
 
   ws.listen(listener);
@@ -38,11 +36,22 @@ const MyEditor = () => {
   ]);
 
   // 定义一个处理文本变化的函数
-  const handleTextChange = (newText: any) => {
+  const notifyTextChange = () => {
+    if(!changeBySelf)
+        return
     console.log("文本改变");
-    ws.send(newText);
+    
+    let msg={
+        uid:guid,
+        opts:editor.operations.filter((x:any)=>x.type!="set_selection")
+    }
+    let operations=JSON.stringify(msg)
+    ws.send(operations);
   };
 
+  const handleChange=(event:any)=>{
+    notifyTextChange()
+  }
   const handleClick = () => {
     console.log("点击更新文字 ");
     let v = [
@@ -51,13 +60,30 @@ const MyEditor = () => {
         children: [{ text: "新的文字" }],
       },
     ];
-    setText(v);
+    Transforms.insertNodes(editor, v, { at: [0] })
   };
+
+    // 将 Slate.js 数据保存为 JSON 字符串
+    const saveToJSON = () => {
+        const jsonValue = JSON.stringify(text);
+        // 这里可以将 jsonValue 保存到文件或数据库
+        console.log('Saved JSON:', jsonValue);
+      };
+    
   return (
-    <Slate editor={editor} initialValue={text} onChange={handleTextChange}>
+    <>
+    <button onClick={saveToJSON}>Save to JSON</button>
+    <Slate editor={editor} initialValue={text} onChange={handleChange}>
       <button onMouseDown={handleClick}>更新文字</button>
-      <Editable />
+      <Editable onKeyDown={(event:any) => {
+        changeBySelf=true
+            if (event.key === '&') {
+                event.preventDefault()
+                editor.insertText('and')
+            }
+        }}/>
     </Slate>
+    </>
   );
 };
 
